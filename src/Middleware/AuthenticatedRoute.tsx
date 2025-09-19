@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 import * as UserService from '../Api/User/UserService.ts';
 
-export default function RequireAuth({ children }: { children: ReactNode })
+export default function AuthenticatedRouteMiddleware({ children }: { children: ReactNode })
 {
     const navigate = useNavigate();
 
