@@ -11,7 +11,6 @@ import Home from './Routes/Home/Home.tsx';
 
 const protectedRoutes = [
     { path: '/', requiredRoles: ['USER'], element: <Home /> },
-    { path: '/test', requiredRoles: ['ADMIN'], element: <Home /> },
 ];
 
 createRoot(document.getElementById('root')!).render(
