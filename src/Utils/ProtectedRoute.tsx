@@ -14,7 +14,6 @@ export default function ProtectedRoute({ roles, children }: { roles?: string[], 
         UserService
             .me()
             .then(user => {
-                console.log(user);
                 if (!roles?.every(role => user?.roles.map(role_ => role_.name).includes(role))) {
                     toast.current?.show({ severity: 'error', summary: 'Falha', detail: 'Você não possui permissão para acessar essa página' });
                     navigate('/');
