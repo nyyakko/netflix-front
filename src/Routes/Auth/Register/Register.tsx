@@ -18,10 +18,6 @@ export default function Register()
     const [request, setRequest] = useState<RegisterRequest>({});
     const toast = useRef<Toast>(null);
 
-    const cardFooter = (
-        <a href='/entrar' style={{textDecoration: 'none'}}>Já sou cadastrado</a>
-    );
-
     const onRegister = () => {
         if (!(request.email && request.password)) {
             toast.current?.show({ severity: 'error', summary: 'Falha', detail: 'Há campos não preenchidos' });
@@ -38,10 +34,14 @@ export default function Register()
             });
     };
 
+    const footer = (
+        <a href='/entrar' style={{textDecoration: 'none'}}>Já sou cadastrado</a>
+    );
+
     return (
         <div id='register'>
             <Toast ref={toast}/>
-            <Card title='Entrar' className='flex flex-col' footer={cardFooter}>
+            <Card title='Entrar' className='flex flex-col' footer={footer}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <InputText placeholder='Usuário' type='text' onChange={(e) => setRequest({...request, name: e.target.value})}></InputText>
                     <InputText placeholder='E-Mail' type='email' onChange={(e) => setRequest({...request, email: e.target.value})}></InputText>

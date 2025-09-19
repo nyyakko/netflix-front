@@ -22,10 +22,6 @@ export default function Login()
     const [request, setRequest] = useState<LoginRequest>({});
     const toast = useRef<Toast>(null);
 
-    const cardFooter = (
-        <a href='/registrar' style={{textDecoration: 'none'}}>Não sou cadastrado</a>
-    );
-
     const onLogin = () => {
         if (!(request.email && request.password)) {
             toast.current?.show({ severity: 'error', summary: 'Falha', detail: 'Há campos não preenchidos' });
@@ -47,10 +43,14 @@ export default function Login()
             });
     };
 
+    const footer = (
+        <a href='/registrar' style={{textDecoration: 'none'}}>Não sou cadastrado</a>
+    );
+
     return (
         <div id='login'>
             <Toast ref={toast}/>
-            <Card title='Entrar' className='flex flex-col' footer={cardFooter}>
+            <Card title='Entrar' className='flex flex-col' footer={footer}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <InputText placeholder='E-Mail' type='email' onChange={(e) => setRequest({...request, email: e.target.value})}></InputText>
                     <InputText placeholder='Senha' type='password' onChange={(e) => setRequest({...request, password: e.target.value})}></InputText>
