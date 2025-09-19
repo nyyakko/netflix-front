@@ -2,23 +2,24 @@ import { UserProvider } from './Contexts/UserContext.tsx';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import { createRoot } from 'react-dom/client';
 
-import AuthenticatedRoute from './Middleware/AuthenticatedRoute.tsx';
+import ProtectedRoute from './Utils/ProtectedRoute.tsx';
 
-import Login from './Routes/Auth/Login/Login.tsx';
-import Register from './Routes/Auth/Register/Register.tsx';
+import Login from './Routes/Login/Login.tsx';
+import Register from './Routes/Register/Register.tsx';
 
 import Home from './Routes/Home/Home.tsx';
 
 const protectedRoutes = [
-    { path: '/', element: <Home /> }
+    { path: '/', requiredRoles: ['USER'], element: <Home /> },
+    { path: '/test', requiredRoles: ['ADMIN'], element: <Home /> },
 ];
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
         <UserProvider>
             <Routes>
-                {protectedRoutes.map(({ path, element }) =>
-                    <Route path={path} element={<AuthenticatedRoute>{element}</AuthenticatedRoute>} />
+                {protectedRoutes.map(({ path, requiredRoles: roles, element }) =>
+                    <Route path={path} element={<ProtectedRoute roles={roles}>{element}</ProtectedRoute>} />
                 )}
                 <Route path='/entrar' element={<Login />} />
                 <Route path='/registrar' element={<Register />} />
