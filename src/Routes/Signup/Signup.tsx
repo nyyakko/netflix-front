@@ -1,5 +1,3 @@
-import { FaRegCircleXmark } from 'react-icons/fa6';
-
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 
@@ -7,33 +5,44 @@ import * as AuthService from '../../Api/Auth/AuthService.ts';
 
 import type { RegisterRequest } from '../../Api/Auth/Contracts/Requests/RegisterRequest.ts';
 
+import InputField, { type InputFieldState } from '../../Components/InputField.tsx';
+
 import './Signup.css';
+
+interface FormState {
+    error?: string
+    field: {
+        name: InputFieldState
+        email: InputFieldState
+        password: InputFieldState
+    }
+};
 
 export default function Signup()
 {
     const navigate = useNavigate();
 
-    const [request, setRequest] = useState<RegisterRequest>({});
-    const [errors, setErrors] = useState<string[]>([]);
+    const [request, setRequest] = useState<RegisterRequest>({ name: '', email: '', password: '' });
+    const [state, setState] = useState<FormState>({ field: { name: 'OK', email: 'OK', password: 'OK' } });
 
-    const onRegister = () => {
-        if (!(request.email && request.password)) {
-            const fields: string[] = [];
-            if (!request.name) fields.push('MISSING_NAME');
-            if (!request.email) fields.push('MISSING_EMAIL');
-            if (!request.password) fields.push('MISSING_PASSWORD');
-            setErrors([...fields]);
+    const onRegister = async () => {
+        const state: FormState = { field: { name: 'OK', email: 'OK', password: 'OK' } };
+        setState(state);
+
+        if (!request.name || !request.email || !request.password) {
+            if (!request.name) state.field.name = 'MISSING_FIELD';
+            if (!request.email) state.field.email = 'MISSING_FIELD';
+            if (!request.password) state.field.password = 'MISSING_FIELD';
+            setState(state);
             return;
         }
 
-        AuthService
-            .signup(request!)
-            .then(() => {
-                navigate('/entrar');
-            })
-            .catch(error => {
-                setErrors([...errors, error.code]);
-            });
+        try {
+            await AuthService.signup(request!);
+            navigate('/entrar');
+        } catch (error: any) {
+            setState({ ...state, error: error.code });
+        }
     };
 
     return (
@@ -43,91 +52,28 @@ export default function Signup()
             </svg>
             <div className='w-full py-10 flex flex-col 2xl:flex-1 2xl:grow 2xl:justify-center items-center'>
                 <div className='bg-black/65 rounded shadow px-15 py-12 w-120 2xl:min-h-160 h-fit'>
-                    <div className='mb-6'>
-                        <label className='text-3xl font-bold text-white'>Cadastrar</label>
-                    </div>
+                    <h1 className='block mb-6 text-3xl font-bold text-white'>Cadastre-se</h1>
                     {
-                        errors?.includes('USER_ALREADY_EXISTS')
+                        state.error == 'USER_ALREADY_EXISTS'
                             ?
                                 <div className='mb-5 rounded px-5 py-5 bg-yellow-600'>
                                     O email informado já está cadastrado.
                                 </div>
                             : <></>
                     }
-                    <div className='mb-5'>
-                        <input
-                            id='name'
-                            className={`shadow px-4 py-3 rounded border ${errors?.includes('MISSING_NAME') ? 'border-red-400' : 'border-gray-400'} w-full text-gray-100 backdrop-blur-sm`}
-                            placeholder='Usuário'
-                            onChange={(e) => {
-                                setRequest({...request, email: e.target.value});
-                                setErrors(errors.filter(x => x != 'MISSING_NAME'));
-                            }}
-                        />
-                        {
-                            errors?.includes('MISSING_NAME')
-                                ?
-                                    <div className='mt-2 flex gap-1.5'>
-                                        <FaRegCircleXmark className='fill-red-400'/>
-                                        <small className='text-red-400'>Informe um nome de usuário válido.</small>
-                                    </div>
-                                : <></>
-                        }
-                    </div>
-                    <div className='mb-5'>
-                        <input
-                            id='email'
-                            type='email'
-                            className={`shadow px-4 py-3 rounded border ${errors?.includes('MISSING_EMAIL') ? 'border-red-400' : 'border-gray-400'} w-full text-gray-100 backdrop-blur-sm`}
-                            placeholder='Email'
-                            onChange={(e) => {
-                                setRequest({...request, email: e.target.value});
-                                setErrors(errors.filter(x => x != 'MISSING_EMAIL'));
-                            }}
-                        />
-                        {
-                            errors?.includes('MISSING_EMAIL')
-                                ?
-                                    <div className='mt-2 flex gap-1.5'>
-                                        <FaRegCircleXmark className='fill-red-400'/>
-                                        <small className='text-red-400'>Informe um email válido.</small>
-                                    </div>
-                                : <></>
-                        }
-                    </div>
-                    <div className='mb-5'>
-                        <input
-                            id='password'
-                            type='password'
-                            className={`shadow px-4 py-3 rounded border ${errors?.includes('MISSING_PASSWORD') ? 'border-red-400' : 'border-gray-400'} w-full text-gray-100 backdrop-blur-sm`}
-                            placeholder='Senha'
-                            onChange={(e) => {
-                                setRequest({...request, password: e.target.value});
-                                setErrors(errors.filter(x => x != 'MISSING_PASSWORD'));
-                            }}
-                        />
-                        {
-                            errors?.includes('MISSING_PASSWORD')
-                                ?
-                                    <div className='mt-2 flex gap-1.5'>
-                                        <FaRegCircleXmark className='fill-red-400'/>
-                                        <small className='text-red-400'>Informe uma senha válida.</small>
-                                    </div>
-                                : <></>
-                        }
-                    </div>
-                    <div className='mb-5'>
-                        <button className='block rounded bg-red-600 hover:bg-red-700 active:bg-red-900 text-white w-full py-2 font-semibold cursor-pointer' onClick={onRegister}>
-                            Assinar
-                        </button>
-                    </div>
-                    <div className='text-gray-300'>
+                    <InputField field='name' type='text' value={request} setValue={setRequest} placeholder='Usuário' state={state.field.name}/>
+                    <InputField field='email' type='email' value={request} setValue={setRequest} placeholder='Email' state={state.field.email}/>
+                    <InputField field='password' type='password' value={request} setValue={setRequest} placeholder='Senha' state={state.field.password}/>
+                    <button className='block mb-5 rounded bg-red-600 hover:bg-red-700 active:bg-red-900 text-white w-full py-2 font-semibold cursor-pointer' onClick={onRegister}>
+                        Assinar
+                    </button>
+                    <div className='block text-gray-300'>
                         Já possui uma conta?
                         <a className='ml-1 text-white font-semibold hover:underline cursor-pointer' onClick={() => { navigate('/entrar') }}>Entre agora.</a>
                     </div>
                 </div>
             </div>
-            <img className='fixed top-0 left-0 bg-repeat z-[-1] brightness-35' src='https://assets.nflxext.com/ffe/siteui/vlv3/bebd95d0-65f9-41a9-9d12-4794db63653e/web/BR-en-20250922-TRIFECTA-perspective_b89b987c-d8b7-42a2-b7ad-72b57c775bd8_large.jpg'></img>
+            <img className='fixed top-0 left-0 bg-repeat z-[-1] brightness-45' src='background.jpg'></img>
         </div>
     )
 }
