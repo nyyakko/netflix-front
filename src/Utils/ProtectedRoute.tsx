@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 import * as UserService from '../Api/User/UserService.ts';
 
-export default function ProtectedRoute({ roles, children }: { roles?: string[], children: ReactNode })
+export default function ProtectedRoute({ roles, redirectElement, children }: { roles?: string[], redirectElement?: ReactNode, children: ReactNode })
 {
     const navigate = useNavigate();
+
+    const [redirect, setRedirect] = useState<ReactNode>();
 
     useEffect(() => {
         UserService
@@ -16,11 +18,15 @@ export default function ProtectedRoute({ roles, children }: { roles?: string[], 
                 }
             })
             .catch(() => {
-                navigate('/entrar');
+                if (redirectElement) {
+                    setRedirect(redirectElement);
+                } else {
+                    navigate('/entrar');
+                }
             });
     }, []);
 
-    return (
+    return redirect ? redirect : (
         <>
             {children}
         </>

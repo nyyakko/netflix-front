@@ -8,17 +8,18 @@ import Login from './Routes/Login/Login.tsx';
 import Signup from './Routes/Signup/Signup.tsx';
 
 import Home from './Routes/Home/Home.tsx';
+import Landing from './Routes/Landing/Landing.tsx';
 
 const protectedRoutes = [
-    { path: '/', requiredRoles: ['USER'], element: <Home /> },
+    { path: '/', roles: ['USER'], element: <Home />, redirectElement: <Landing /> },
 ];
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
         <UserProvider>
             <Routes>
-                {protectedRoutes.map(({ path, requiredRoles: roles, element }) =>
-                    <Route path={path} element={<ProtectedRoute roles={roles}>{element}</ProtectedRoute>} />
+                {protectedRoutes.map(({ path, roles, element, redirectElement }) =>
+                    <Route path={path} element={<ProtectedRoute roles={roles} redirectElement={redirectElement}>{element}</ProtectedRoute>} />
                 )}
                 <Route path='/entrar' element={<Login />} />
                 <Route path='/cadastre-se' element={<Signup />} />
