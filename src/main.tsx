@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client';
 import ProtectedRoute from './Utils/ProtectedRoute.tsx';
 
 import Login from './Routes/Login/Login.tsx';
-import Register from './Routes/Register/Register.tsx';
+import Signup from './Routes/Signup/Signup.tsx';
 
 import Home from './Routes/Home/Home.tsx';
 
@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
                     <Route path={path} element={<ProtectedRoute roles={roles}>{element}</ProtectedRoute>} />
                 )}
                 <Route path='/entrar' element={<Login />} />
-                <Route path='/cadastre-se' element={<Register />} />
+                <Route path='/cadastre-se' element={<Signup />} />
             </Routes>
         </UserProvider>
     </BrowserRouter>,

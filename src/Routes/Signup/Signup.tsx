@@ -5,11 +5,11 @@ import { useState } from 'react';
 
 import * as AuthService from '../../Api/Auth/AuthService.ts';
 
-import type { RegisterRequest } from '../../Api/Auth/Contracts/Requests/RegisterRequest';
+import type { RegisterRequest } from '../../Api/Auth/Contracts/Requests/RegisterRequest.ts';
 
-import './Register.css';
+import './Signup.css';
 
-export default function Register()
+export default function Signup()
 {
     const navigate = useNavigate();
 
