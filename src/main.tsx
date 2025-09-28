@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
                     <Route path={path} element={<ProtectedRoute roles={roles}>{element}</ProtectedRoute>} />
                 )}
                 <Route path='/entrar' element={<Login />} />
-                <Route path='/registrar' element={<Register />} />
+                <Route path='/cadastre-se' element={<Register />} />
             </Routes>
         </UserProvider>
     </BrowserRouter>,

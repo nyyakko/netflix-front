@@ -31,9 +31,9 @@ export async function logout()
     }
 }
 
-export async function register(request: RegisterRequest): Promise<void>
+export async function signup(request: RegisterRequest): Promise<void>
 {
-    const response = await fetch(`${endpoint}/register`, {
+    const response = await fetch(`${endpoint}/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
