@@ -41,7 +41,7 @@ export default function Login()
         }
 
         try {
-            await AuthService.login(request!);
+            await AuthService.signIn(request!);
             userContext.setUser(await UserService.me());
             navigate('/');
         } catch (error: any) {

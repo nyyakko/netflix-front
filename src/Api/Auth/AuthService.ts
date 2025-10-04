@@ -3,9 +3,9 @@ import { type LoginRequest } from './Contracts/Requests/LoginRequest.ts';
 
 const endpoint = `${import.meta.env.VITE_API_BASE_URL}/api/auth`;
 
-export async function login(request: LoginRequest): Promise<void>
+export async function signIn(request: LoginRequest): Promise<void>
 {
-    const response = await fetch(`${endpoint}/login`, {
+    const response = await fetch(`${endpoint}/signin`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -19,9 +19,9 @@ export async function login(request: LoginRequest): Promise<void>
     }
 }
 
-export async function logout()
+export async function signOff()
 {
-    const response = await fetch(`${endpoint}/logout`, {
+    const response = await fetch(`${endpoint}/signoff`, {
         method: 'POST',
         credentials: 'include'
     });
@@ -31,7 +31,7 @@ export async function logout()
     }
 }
 
-export async function signup(request: RegisterRequest): Promise<void>
+export async function signUp(request: RegisterRequest): Promise<void>
 {
     const response = await fetch(`${endpoint}/signup`, {
         method: 'POST',

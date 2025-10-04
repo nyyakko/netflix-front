@@ -38,7 +38,7 @@ export default function Signup()
         }
 
         try {
-            await AuthService.signup(request!);
+            await AuthService.signUp(request!);
             navigate('/entrar');
         } catch (error: any) {
             setState({ ...state, error: error.code });
