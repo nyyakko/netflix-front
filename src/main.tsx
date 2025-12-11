@@ -10,7 +10,7 @@ import Signup from './Routes/Signup/Signup.tsx';
 import Home from './Routes/Home/Home.tsx';
 
 const protectedRoutes = [
-    { path: '/', roles: ['USER'], success: <Home />, failure: <Login /> },
+    { path: '/', roles: ['USER'], success: <Home />, failure: '/entrar' },
 ];
 
 createRoot(document.getElementById('root')!).render(
