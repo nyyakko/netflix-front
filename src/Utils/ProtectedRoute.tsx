@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 
 import * as UserService from '../Api/User/UserService.ts';
 
-export default function ProtectedRoute({ roles, redirectElement, children }: { roles?: string[], redirectElement?: ReactNode, children: ReactNode })
+export default function ProtectedRoute({ roles, failure, children }: { roles?: string[], failure?: ReactNode, children: ReactNode })
 {
     const navigate = useNavigate();
 
@@ -18,8 +18,8 @@ export default function ProtectedRoute({ roles, redirectElement, children }: { r
                 }
             })
             .catch(() => {
-                if (redirectElement) {
-                    setRedirect(redirectElement);
+                if (failure) {
+                    setRedirect(failure);
                 } else {
                     navigate('/entrar');
                 }
