@@ -13,12 +13,14 @@ export function ModalProvider({ children }: { children: ReactNode })
         const [content, setContent] = useState<ReactNode>(null);
 
         const handle = (content: ReactNode) => {
+            setContent(content);
+
             if (content) {
                 document.querySelector('#root')?.classList.add('opacity-50');
-                setContent(content);
+                document.querySelector('#root')?.classList.add('pointer-events-none');
             } else {
                 document.querySelector('#root')?.classList.remove('opacity-50');
-                setContent(null);
+                document.querySelector('#root')?.classList.remove('pointer-events-none');
             }
         };
 

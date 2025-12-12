@@ -5,6 +5,8 @@ interface CarouselProps<T> {
     visible: number;
     scroll: number;
     template?: (value: T) => ReactElement;
+    className?: string;
+    cycle?: boolean;
 }
 
 export default function Carousel<T>(props: CarouselProps<T>) {
@@ -33,18 +35,13 @@ export default function Carousel<T>(props: CarouselProps<T>) {
     });
 
     return (
-        <div className='flex gap-15 w-full' ref={carouselRef}>
+        <div className={`flex gap-15 w-fit ${props.className}`} ref={carouselRef}>
             {
                 (() => {
                     let indexes = [...Array(props.visible).keys()].map(_index => _index + index);
                     return indexes.map(index => {
                         return props.value.map((value) => { return (
-                            <div
-                                className='hover:scale-110 transition delay-15 h-100 cursor-pointer'
-                                key={Math.random()}
-                            >
-                            {props.template!(value)}
-                            </div>
+                            <div key={Math.random()} > {props.template!(value)} </div>
                         )})[index]
                     });
                 })()

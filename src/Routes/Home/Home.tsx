@@ -12,6 +12,12 @@ import * as MovieService from '../../Api/Movie/MovieService.ts';
 
 import './Home.css';
 
+interface Breakpoint {
+    carousel: {
+        visible: number;
+    };
+};
+
 export default function Home()
 {
     const {setModal} = useModal();
@@ -19,30 +25,59 @@ export default function Home()
     const [movies, setMovies] = useState<MovieResponse[]>([]);
     const [popularMovie, setPopularMovie] = useState<MovieResponse>();
 
+    const [showCaret, setShowCaret] = useState<boolean>(true);
+    const handleScroll = () => setShowCaret(!(window.scrollY > window.innerHeight/5));
+
     useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
         (async () => {
             const movies = await MovieService.get(1, 100);
             setMovies(movies);
             setPopularMovie(movies.sort(movie => movie.popularity)[0]);
         })();
-    }, []);
-
-    const [showCaret, setShowCaret] = useState<boolean>(true);
-
-    const handleScroll = () => setShowCaret(!(window.scrollY > window.innerHeight/5));
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const movieTemplate = (movie: MovieResponse) => {
+    const [currentBreakpoint, setCurrentBreakpoint] = useState<Breakpoint>();
+
+    const breakpoints: Breakpoint[] = [
+        {
+            carousel: {
+                visible: 6
+            }
+        },
+        {
+            carousel: {
+                visible: 4
+            }
+        },
+        {
+            carousel: {
+                visible: 3
+            }
+        }
+    ];
+
+    const handleResize = () => {
+        if (window.innerWidth >= 1900) setCurrentBreakpoint(breakpoints[0]);
+        else if (window.innerWidth >= 1600 && window.innerWidth < 1900) setCurrentBreakpoint(breakpoints[0]);
+        else if (window.innerWidth >= 1300 && window.innerWidth < 1600) setCurrentBreakpoint(breakpoints[1]);
+        else if (window.innerWidth >= 800 && window.innerWidth < 1300) setCurrentBreakpoint(breakpoints[2]);
+    };
+
+    useEffect(() => {
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const teatherTemplate = (movie: MovieResponse) => {
         const handleClick = () => {
             setModal(<MovieInfoModal movie={movie}/>);
         };
 
         return (
-            <div className='bg-[#252525] h-full carousel-entry rounded-2xl' onClick={handleClick}>
+            <div className='bg-[#252525] h-100 carousel-entry rounded-2xl hover:scale-110 transition delay-15 cursor-pointer' onClick={handleClick}>
                 <img className='object-cover h-full rounded-2xl' src={movie.posterPath} />
             </div>
         )
@@ -108,25 +143,28 @@ export default function Home()
                     <p className='text-white max-w-100'>{popularMovie?.synopsis}</p>
                 </div>
 
-                <img className='z-1 absolute w-[50%] rounded-2xl top-[50%] left-[60%] origin-center transform -translate-x-1/2 -translate-y-1/2' src={popularMovie?.backdropPath} />
-                <img className='h-full w-full blur-md' src={popularMovie?.backdropPath} />
+                <div>
+                    <img className='z-1 absolute w-[50%] rounded-md top-[50%] left-[60%] origin-center transform -translate-x-1/2 -translate-y-1/2' src={popularMovie?.backdropPath} />
+                    <img className='h-full w-full blur-md' src={popularMovie?.backdropPath} />
+                </div>
+
                 <div className='absolute inset-0 bg-[linear-gradient(90deg,rgba(21,21,21,1),rgba(21,21,21,0))]' />
                 <div className='absolute inset-0 bg-[linear-gradient(0deg,rgba(21,21,21,1),rgba(21,21,21,0))]' />
 
                 <FontAwesomeIcon className={`absolute bottom-5 left-[50%] animate-bounce transition duration-250 opacity-${showCaret ? `100` : `0`}`} icon={faCaretDown} />
             </div>
             <div className='p-5'>
-                <div className='pl-10 pr-10 mb-5' id='popular'>
+                <div className='pl-10 pr-10 mb-10' id='popular'>
                     <h1 className='block mb-6 text-xl font-bold text-white'>Popular Agora</h1>
-                    <Carousel value={movies.filter(movie => movie.popularity > 100)} visible={6} scroll={1} template={movieTemplate}/>
+                    <Carousel value={movies.filter(movie => movie.popularity > 100)} visible={currentBreakpoint?.carousel.visible!} scroll={1} template={teatherTemplate}/>
                 </div>
-                <div className='pl-10 pr-10 mb-5' id='originals'>
+                <div className='pl-10 pr-10 mb-10' id='originals'>
                     <h1 className='block mb-6 text-xl font-bold text-white'>Filmes Originais</h1>
-                    <Carousel value={movies.slice(10, 20).filter(movie => movie.original)} visible={6} scroll={1} template={movieTemplate}/>
+                    <Carousel value={movies.slice(10, 20).filter(movie => movie.original)} visible={currentBreakpoint?.carousel.visible!} scroll={1} template={teatherTemplate}/>
                 </div>
-                <div className='pl-10 pr-10 mb-5' id='most-rated'>
+                <div className='pl-10 pr-10 mb-10' id='most-rated'>
                     <h1 className='block mb-6 text-xl font-bold text-white'>Mais Avaliados</h1>
-                    <Carousel value={movies.slice(20, 30).filter(movie => movie.rating >= 8)} visible={6} scroll={1} template={movieTemplate}/>
+                    <Carousel value={movies.slice(20, 30).filter(movie => movie.rating >= 8)} visible={currentBreakpoint?.carousel.visible!} scroll={1} template={teatherTemplate}/>
                 </div>
             </div>
         </div>
