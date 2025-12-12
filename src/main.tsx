@@ -8,6 +8,7 @@ import Login from './Routes/Login/Login.tsx';
 import Signup from './Routes/Signup/Signup.tsx';
 
 import Home from './Routes/Home/Home.tsx';
+import { ModalProvider } from './Contexts/ModalContext.tsx';
 
 const protectedRoutes = [
     { path: '/', roles: ['USER'], success: <Home />, failure: '/entrar' },
@@ -16,13 +17,15 @@ const protectedRoutes = [
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
         <UserProvider>
-            <Routes>
-                {protectedRoutes.map(({ path, roles, success, failure }) =>
-                    <Route path={path} element={<ProtectedRoute roles={roles} failure={failure}>{success}</ProtectedRoute>} />
-                )}
-                <Route path='/entrar' element={<Login />} />
-                <Route path='/cadastre-se' element={<Signup />} />
-            </Routes>
+            <ModalProvider>
+                <Routes>
+                    {protectedRoutes.map(({ path, roles, success, failure }) =>
+                        <Route path={path} element={<ProtectedRoute roles={roles} failure={failure}>{success}</ProtectedRoute>} />
+                    )}
+                    <Route path='/entrar' element={<Login />} />
+                    <Route path='/cadastre-se' element={<Signup />} />
+                </Routes>
+            </ModalProvider>
         </UserProvider>
     </BrowserRouter>,
 )
