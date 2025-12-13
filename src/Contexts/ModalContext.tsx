@@ -16,10 +16,8 @@ export function ModalProvider({ children }: { children: ReactNode })
             setContent(content);
 
             if (content) {
-                document.querySelector('#root')?.classList.add('opacity-50');
                 document.querySelector('#root')?.classList.add('pointer-events-none');
             } else {
-                document.querySelector('#root')?.classList.remove('opacity-50');
                 document.querySelector('#root')?.classList.remove('pointer-events-none');
             }
         };
@@ -35,6 +33,7 @@ export function ModalProvider({ children }: { children: ReactNode })
             content: content
         }}>
             {content}
+            {content ? <div className='fixed z-49 w-full h-[100%] bg-black/50' /> : <></>}
             {children}
         </ModalContext>
     );

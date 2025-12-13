@@ -93,9 +93,7 @@ export default function Home()
                     <button className='cursor-pointer hover:text-gray-300 text-white'>
                         <FontAwesomeIcon icon={faCaretDown} />
                     </button>
-                    <button className='cursor-pointer hover:text-gray-300 text-white'>
-                        <img className='w-10 h-10 rounded-lg' src='profile.jpg' />
-                    </button>
+                    <img className='w-10 h-10 rounded-lg' src='profile.jpg' />
                 </div>
                 <div className='flex justify-center gap-5'>
                     <button className='cursor-pointer hover:text-gray-300 text-white'>
