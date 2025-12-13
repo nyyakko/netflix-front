@@ -38,7 +38,7 @@ export default function Carousel<T>(props: CarouselProps<T>) {
                     return indexes.map(index => {
                         return props.value.map((value) => { return (
                             <div key={Math.random()} > {props.template!(value)} </div>
-                        )})[index % props.value.length]
+                        )})[((index % props.value.length) + props.value.length) % props.value.length]
                     });
                 })()
             }
