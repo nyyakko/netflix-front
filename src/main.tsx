@@ -4,10 +4,10 @@ import { createRoot } from 'react-dom/client';
 
 import ProtectedRoute from './Utils/ProtectedRoute.tsx';
 
-import Login from './Routes/Login/Login.tsx';
-import Signup from './Routes/Signup/Signup.tsx';
+import Login from './Pages/Login/Login.tsx';
+import Signup from './Pages/Signup/Signup.tsx';
 
-import Home from './Routes/Home/Home.tsx';
+import Home from './Pages/Home/Home.tsx';
 import { ModalProvider } from './Contexts/ModalContext.tsx';
 
 const protectedRoutes = [
