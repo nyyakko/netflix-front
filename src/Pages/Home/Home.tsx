@@ -25,16 +25,19 @@ export default function Home()
     const [movies, setMovies] = useState<MovieResponse[]>([]);
     const [popularMovie, setPopularMovie] = useState<MovieResponse>();
 
-    const [showCaret, setShowCaret] = useState<boolean>(true);
-    const handleScroll = () => setShowCaret(!(window.scrollY > window.innerHeight/5));
-
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
         (async () => {
             const movies = await MovieService.get(1, 100);
             setMovies(movies);
             setPopularMovie(movies.sort(movie => movie.popularity)[0]);
         })();
+    }, []);
+
+    const [showCaret, setShowCaret] = useState<boolean>(true);
+    const handleScroll = () => setShowCaret(!(window.scrollY > window.innerHeight/75));
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -151,7 +154,7 @@ export default function Home()
                 <div className='absolute inset-0 bg-[linear-gradient(90deg,rgba(21,21,21,1),rgba(21,21,21,0))]' />
                 <div className='absolute inset-0 bg-[linear-gradient(0deg,rgba(21,21,21,1),rgba(21,21,21,0))]' />
 
-                <FontAwesomeIcon className={`absolute bottom-5 left-[50%] animate-bounce transition duration-250 opacity-${showCaret ? `100` : `0`}`} icon={faCaretDown} />
+                <FontAwesomeIcon className={`absolute bottom-5 left-[50%] animate-bounce transition duration-250 ${showCaret ? `opacity-100` : `opacity-0`}`} icon={faCaretDown} />
             </div>
             <div className='p-5'>
                 <div className='pl-10 pr-10 mb-10' id='popular'>
