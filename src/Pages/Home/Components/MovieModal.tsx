@@ -24,7 +24,7 @@ export default function MovieInfoModal({ movie }: { movie: MovieResponse })
     }, []);
 
     return createPortal((
-        <div className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[35%] md:w-[75%] lg:w-[80%] lg:aspect-video bg-[#252525] z-50 overflow-auto rounded-2xl flex justify-between'>
+        <div className='flex fixed overflow-auto rounded-2xl z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[35%] md:w-[75%] lg:w-[75%] lg:aspect-video bg-[#252525]'>
             <div className='flex flex-col z-1 p-10 gap-4'>
                 <h1 className='text-6xl text-white pointer-events-none'>{movie.title}</h1>
 
@@ -45,7 +45,7 @@ export default function MovieInfoModal({ movie }: { movie: MovieResponse })
                 }
                 </div>
 
-                <p className='text-xl/5.5 text-white/80 max-w-400'>{movie.synopsis}</p>
+                <p className='text-xl/5.5 text-white/80 max-w-400 p-1 h-fit max-h-200 overflow-y-scroll'>{movie.synopsis}</p>
 
                 <div className='flex pt-5 pb-5 gap-4'>
                     <button className='block rounded bg-red-600 hover:bg-red-700 active:bg-red-900 text-white h-13 w-45 py-2 font-semibold cursor-pointer'>
