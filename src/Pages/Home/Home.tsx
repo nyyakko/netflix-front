@@ -80,7 +80,7 @@ export default function Home()
         };
 
         return (
-            <div className='bg-[#252525] h-100 w-65 carousel-entry rounded-2xl hover:scale-110 transition delay-125 cursor-pointer' onClick={handleClick}>
+            <div className='bg-[#252525] h-100 w-65 carousel-entry rounded-2xl hover:scale-110 transition delay-25 cursor-pointer' onClick={handleClick}>
                 <img className='object-cover h-full rounded-2xl' src={movie.posterPath} />
             </div>
         )
