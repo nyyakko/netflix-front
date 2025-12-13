@@ -29,7 +29,7 @@ export default function Home()
         (async () => {
             const movies = await MovieService.get(1, 100);
             setMovies(movies);
-            setPopularMovie(movies.sort(movie => movie.popularity)[0]);
+            setPopularMovie(movies.sort(movie => movie.popularity).reverse()[0]);
         })();
     }, []);
 

@@ -1,10 +1,12 @@
 import { createPortal } from 'react-dom';
 
-import type { MovieResponse } from '../../../Api/Movie/Contracts/Responses/MovieResponse';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { useModal } from '../../../Contexts/ModalContext';
+
+import type { MovieResponse } from '../../../Api/Movie/Contracts/Responses/MovieResponse';
+import type { GenreResponse } from '../../../Api/Genre/Contracts/Response/GenreResponse';
 
 export default function MovieInfoModal({ movie }: { movie: MovieResponse })
 {
@@ -24,14 +26,26 @@ export default function MovieInfoModal({ movie }: { movie: MovieResponse })
     return createPortal((
         <div className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[35%] md:w-[75%] lg:w-[80%] lg:aspect-video bg-[#252525] z-50 overflow-auto rounded-2xl flex justify-between'>
             <div className='flex flex-col z-1 p-10 gap-4'>
-                <h1 className='text-6xl text-white'>{movie.title}</h1>
+                <h1 className='text-6xl text-white pointer-events-none'>{movie.title}</h1>
 
-                <div className='flex flex-row items-center gap-4'>
+                <div className='flex flex-row items-center gap-4 pointer-events-none'>
                     <h1 className='text-lg font-bold text-green-400'>{`Avaliações: ${Math.round(movie.rating/10 * 100)}%`}</h1>
                     <h1 className='text-white'>{`Lançamento: ${new Date(movie.releaseDate).toLocaleDateString('en-ca')}`}</h1>
                 </div>
 
-                <p className='text-xl text-white/80 max-w-400'>{movie.synopsis}</p>
+                <div className='flex flex-row gap-2 pointer-events-none'>
+                {
+                    movie.genres.map((genre: GenreResponse) => {
+                        return (
+                            <div key={Math.random()} className='text-white p-1 pl-2 pr-2 bg-[#353535] rounded-2xl w-fit text-sm'>
+                                {genre.name}
+                            </div>
+                        );
+                    })
+                }
+                </div>
+
+                <p className='text-xl/5.5 text-white/80 max-w-400'>{movie.synopsis}</p>
 
                 <div className='flex pt-5 pb-5 gap-4'>
                     <button className='block rounded bg-red-600 hover:bg-red-700 active:bg-red-900 text-white h-13 w-45 py-2 font-semibold cursor-pointer'>

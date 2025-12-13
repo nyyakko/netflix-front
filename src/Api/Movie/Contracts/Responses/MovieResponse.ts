@@ -1,3 +1,5 @@
+import type { GenreResponse } from "../../../Genre/Contracts/Response/GenreResponse";
+
 export type MovieResponse = {
     id: number;
     title: string;
@@ -5,7 +7,7 @@ export type MovieResponse = {
     synopsis: string;
     rating: number;
     popularity: number;
-    genres: string[];
+    genres: GenreResponse[];
     original: boolean;
     posterPath: string;
     backdropPath: string;
